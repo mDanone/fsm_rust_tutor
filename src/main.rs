@@ -12,37 +12,10 @@
 // 10. The type system should be harnessed to our greatest ability.
 // 11. As many errors as possible should be at compile-time
 
-
-#[derive(Debug)]
-enum BottleFillerState {
-    Waiting {waiting_time: std::time::Duration},
-    Filling {rate: usize},
-    Done
-}
-
-
-struct StateMachine {
-    state: BottleFillerState
-}
-
-impl StateMachine {
-    fn new() -> Self {
-        StateMachine {
-            state: BottleFillerState::Waiting {waiting_time: std::time::Duration::new(0, 0)}
-        }
-    }
-
-    fn to_filling(mut self) -> StateMachine {
-        self.state = match self.state {
-            BottleFillerState::Waiting { .. } => BottleFillerState::Filling {rate: 1},
-            _ => panic!("Invalid state transition!"),
-        };
-        self
-    }
-}
+mod enum_based_machine_state;
 
 fn main() {
-    let mut state_machine = StateMachine::new();
+    let mut state_machine = enum_based_machine_state::StateMachine::new();
     state_machine = state_machine.to_filling();
-    println!("{:?}", state_machine.state);
+    state_machine.current_state();
 }
