@@ -13,16 +13,36 @@
 // 11. As many errors as possible should be at compile-time
 
 
+#[derive(Debug)]
 enum BottleFillerState {
     Waiting {waiting_time: std::time::Duration},
     Filling {rate: usize},
     Done
 }
 
-struct Machine {
+
+struct StateMachine {
     state: BottleFillerState
 }
 
+impl StateMachine {
+    fn new() -> Self {
+        StateMachine {
+            state: BottleFillerState::Waiting {waiting_time: std::time::Duration::new(0, 0)}
+        }
+    }
+
+    fn to_filling(mut self) -> StateMachine {
+        self.state = match self.state {
+            BottleFillerState::Waiting { .. } => BottleFillerState::Filling {rate: 1},
+            _ => panic!("Invalid state transition!"),
+        };
+        self
+    }
+}
+
 fn main() {
-    let machine = Machine;
+    let mut state_machine = StateMachine::new();
+    state_machine = state_machine.to_filling();
+    println!("{:?}", state_machine.state);
 }
