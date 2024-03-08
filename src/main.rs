@@ -13,6 +13,7 @@
 // 11. As many errors as possible should be at compile-time
 
 mod enum_based_machine_state;
+mod structure_based_machine_state;
 
 fn main() {
     let mut state_machine = enum_based_machine_state::StateMachine::new();
